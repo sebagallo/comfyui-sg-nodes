@@ -1,0 +1,14 @@
+[project]
+name = "comfyui-sg-nodes"
+description = "Various utility nodes for ComfyUI"
+version = "1.0.0"
+license = { file = "LICENSE" }
+dependencies = []
+
+[project.urls]
+Repository = "https://github.com/yourusername/comfyui-sg-nodes"
+
+[tool.comfy]
+PublisherId = "sebagallo"
+DisplayName = "comfyui-sg-nodes"
+Icon = "https://raw.githubusercontent.com/sebagallo/comfyui-sg-nodes/master/assets/icon.png"
