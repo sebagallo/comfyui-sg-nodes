@@ -156,3 +156,26 @@ class LoadGGUFDraftPath(ComfyNodeABC):
 
         except Exception as e:
             raise RuntimeError(f"Failed to load model path: {str(e)}")
+
+
+class WaitForPassthrough(ComfyNodeABC):
+    @classmethod
+    def INPUT_TYPES(cls) -> InputTypeDict:
+        return {
+            "required": {
+                "passthrough": (IO.ANY, {"lazy": True}),
+                "wait_for": (IO.ANY, {}),
+            }
+        }
+
+    RETURN_TYPES = (IO.ANY,)
+    RETURN_NAMES = ("passthrough",)
+    FUNCTION = "execute"
+    CATEGORY = "SGNodes/Utilities"
+
+    def check_lazy_status(self, wait_for, passthrough=None):
+        if wait_for and passthrough is None:
+            return ["passthrough"]
+
+    def execute(self, wait_for, passthrough=None):
+        return (passthrough,)
