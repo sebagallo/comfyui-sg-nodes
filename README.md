@@ -1,4 +1,4 @@
-[.gitignore](../comfyui-sg-process-manager/.gitignore)# ComfyUI SG Nodes
+# ComfyUI SG Nodes
 
 A collection of custom nodes for ComfyUI.
 
