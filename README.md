@@ -35,6 +35,15 @@ A utility node that waits for one input to be ready before passing through anoth
 - **Output**: The `passthrough` input value
 - **Behavior**: Executes when `wait_for` is ready, then requests the `passthrough` value if not already available
 
+### Wait For Milliseconds
+Pauses execution for a specified number of milliseconds.
+
+- **Category**: SGNodes/Utilities
+- **Inputs**:
+  - `passthrough`: Any type, lazy input that will be returned
+  - `milliseconds`: Integer, number of milliseconds to wait (default: 1000)
+- **Output**: The `passthrough` input value
+
 ### Call Remote URL
 Performs a server-side HTTP request to a remote URL. Useful for integrating with external APIs.
 

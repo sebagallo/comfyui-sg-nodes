@@ -4,6 +4,7 @@ import json
 import folder_paths
 from comfy.comfy_types import IO, ComfyNodeABC, InputTypeDict
 from typing import Dict, Any, List
+import time
 
 # Config file path
 CONFIG_FILE = os.path.join(os.path.dirname(__file__), 'config.json')
@@ -178,8 +179,31 @@ class WaitForPassthrough(ComfyNodeABC):
         if wait_for and passthrough is None:
             return ["passthrough"]
 
-
     def execute(self, wait_for, passthrough=None):
+        return (passthrough,)
+
+
+class WaitForMilliseconds(ComfyNodeABC):
+    @classmethod
+    def INPUT_TYPES(cls) -> InputTypeDict:
+        return {
+            "required": {
+                "passthrough": (IO.ANY, {"lazy": True}),
+                "milliseconds": ("INT", {"default": 1000, "min": 0, "max": 600000}),
+            }
+        }
+
+    RETURN_TYPES = (IO.ANY,)
+    RETURN_NAMES = ("passthrough",)
+    FUNCTION = "wait"
+    CATEGORY = "SGNodes/Utilities"
+
+    def check_lazy_status(self, milliseconds, passthrough=None):
+        if passthrough is None:
+            return ["passthrough"]
+
+    def wait(self, milliseconds, passthrough=None):
+        time.sleep(milliseconds / 1000.0)
         return (passthrough,)
 
 
