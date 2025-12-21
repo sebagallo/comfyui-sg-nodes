@@ -82,6 +82,34 @@ Polls a remote URL until a matching condition is met or maximum attempts are rea
   - `status_code`: Last HTTP status code (INT).
   - `response_body`: Last response content (STRING).
 
+### Map JSON To Property
+Extracts a property from a JSON object string.
+
+- **Category**: SGNodes/JSON
+- **Inputs**:
+  - `json_string`: JSON object string (e.g., `{"a": 1}`).
+  - `property_name`: Name of the property to extract. Supports dot notation for nested keys (e.g., `data.user.id`).
+- **Output**: The value of the property as a string. If the value is an object or array, it returns a JSON string.
+
+### Map JSON Array
+Maps a property from each object in a JSON array.
+
+- **Category**: SGNodes/JSON
+- **Inputs**:
+  - `json_array`: JSON array string (e.g., `[{"id": 1}, {"id": 2}]`).
+  - `property_name`: Name of the property to extract from each item. Supports dot notation (e.g., `user.name`).
+- **Output**: A JSON array string of the extracted values (e.g., `["User1", "User2"]`).
+
+### Find JSON Element
+Finds the first element in a JSON array that matches a key-value pair.
+
+- **Category**: SGNodes/JSON
+- **Inputs**:
+  - `json_array`: JSON array string.
+  - `match_key`: The key to check in each element. Supports dot notation (e.g., `status.code`).
+  - `match_value`: The value to match against (compared as string).
+- **Output**: The matching element as a JSON string. Returns empty string if not found.
+
 ## Configuration
 
 Create a `config.json` file in the same directory as this package to specify additional model folders to scan:

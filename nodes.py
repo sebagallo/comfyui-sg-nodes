@@ -332,3 +332,137 @@ class PollRemoteUrl(ComfyNodeABC):
             
         return (passthrough, last_status, last_response)
 
+
+def get_nested_value(data, path, default=None):
+    """Retrieve a value from a nested dictionary using dot notation."""
+    try:
+        keys = path.split('.')
+        current = data
+        for key in keys:
+            if isinstance(current, dict):
+                current = current.get(key, default)
+            elif isinstance(current, list):
+                # Optional: support list indexing via integers?
+                try:
+                    index = int(key)
+                    if 0 <= index < len(current):
+                         current = current[index]
+                    else:
+                        return default
+                except ValueError:
+                     return default
+            else:
+                return default
+                
+            if current is None:
+                return default
+                
+        return current
+    except Exception:
+        return default
+
+class MapJsonToProperty(ComfyNodeABC):
+    @classmethod
+    def INPUT_TYPES(cls) -> InputTypeDict:
+        return {
+            "required": {
+                "json_string": ("STRING", {"multiline": True, "default": "{}"}),
+                "property_name": ("STRING", {"default": ""}),
+            }
+        }
+
+    RETURN_TYPES = ("STRING",)
+    RETURN_NAMES = ("string_value",)
+    FUNCTION = "map_to_property"
+    CATEGORY = "SGNodes/JSON"
+
+    def map_to_property(self, json_string, property_name):
+        try:
+            data = json.loads(json_string)
+            if not isinstance(data, (dict, list)): # Allow list as root for index access
+                 return ("",)
+
+            value = get_nested_value(data, property_name)
+            
+            if value is None:
+                return ("",)
+
+            if isinstance(value, (dict, list)):
+                return (json.dumps(value),)
+            
+            return (str(value),)
+            
+        except json.JSONDecodeError:
+            return ("",)
+        except Exception as e:
+            return (str(e),)
+
+class MapJsonArray(ComfyNodeABC):
+    @classmethod
+    def INPUT_TYPES(cls) -> InputTypeDict:
+        return {
+            "required": {
+                "json_array": ("STRING", {"multiline": True, "default": "[]"}),
+                "property_name": ("STRING", {"default": ""}),
+            }
+        }
+
+    RETURN_TYPES = ("STRING",)
+    RETURN_NAMES = ("mapped_array",)
+    FUNCTION = "map_array"
+    CATEGORY = "SGNodes/JSON"
+
+    def map_array(self, json_array, property_name):
+        try:
+            data = json.loads(json_array)
+            if not isinstance(data, list):
+                return ("[]",)
+
+            result = []
+            for item in data:
+                 value = get_nested_value(item, property_name)
+                 if value is not None:
+                     result.append(value)
+            
+            return (json.dumps(result),)
+            
+        except json.JSONDecodeError:
+            return ("[]",)
+        except Exception as e:
+            return (f"Error: {str(e)}",)
+
+class FindJsonElement(ComfyNodeABC):
+    @classmethod
+    def INPUT_TYPES(cls) -> InputTypeDict:
+        return {
+            "required": {
+                "json_array": ("STRING", {"multiline": True, "default": "[]"}),
+                "match_key": ("STRING", {"default": ""}),
+                "match_value": ("STRING", {"default": ""}),
+            }
+        }
+
+    RETURN_TYPES = ("STRING",)
+    RETURN_NAMES = ("found_element",)
+    FUNCTION = "find_element"
+    CATEGORY = "SGNodes/JSON"
+
+    def find_element(self, json_array, match_key, match_value):
+        try:
+            data = json.loads(json_array)
+            if not isinstance(data, list):
+                 return ("",)
+
+            for item in data:
+                val = get_nested_value(item, match_key)
+                if val is not None:
+                    # Compare as strings to be robust
+                    if str(val) == str(match_value):
+                        return (json.dumps(item),)
+                            
+            return ("",)
+
+        except json.JSONDecodeError:
+            return ("",)
+        except Exception as e:
+            return (f"Error: {str(e)}",)

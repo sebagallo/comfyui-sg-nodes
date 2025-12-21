@@ -1,5 +1,5 @@
 
-from .nodes import LoadGGUFPath, LoadGGUFMPROJPath, LoadGGUFDraftPath, WaitForPassthrough, CallRemoteUrl, WaitForMilliseconds, PollRemoteUrl
+from .nodes import LoadGGUFPath, LoadGGUFMPROJPath, LoadGGUFDraftPath, WaitForPassthrough, CallRemoteUrl, WaitForMilliseconds, PollRemoteUrl, MapJsonToProperty, MapJsonArray, FindJsonElement
 
 NODE_CLASS_MAPPINGS = {
     "LoadGGUFPath": LoadGGUFPath,
@@ -9,6 +9,9 @@ NODE_CLASS_MAPPINGS = {
     "WaitForMilliseconds": WaitForMilliseconds,
     "CallRemoteUrl": CallRemoteUrl,
     "PollRemoteUrl": PollRemoteUrl,
+    "MapJsonToProperty": MapJsonToProperty,
+    "MapJsonArray": MapJsonArray,
+    "FindJsonElement": FindJsonElement,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -19,4 +22,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "WaitForMilliseconds": "Wait For Milliseconds",
     "CallRemoteUrl": "Call Remote URL",
     "PollRemoteUrl": "Poll Remote URL",
+    "MapJsonToProperty": "Map JSON To Property",
+    "MapJsonArray": "Map JSON Array",
+    "FindJsonElement": "Find JSON Element",
 }
