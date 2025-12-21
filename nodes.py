@@ -1,4 +1,5 @@
 import os
+import requests
 import json
 import folder_paths
 from comfy.comfy_types import IO, ComfyNodeABC, InputTypeDict
@@ -177,5 +178,41 @@ class WaitForPassthrough(ComfyNodeABC):
         if wait_for and passthrough is None:
             return ["passthrough"]
 
+
     def execute(self, wait_for, passthrough=None):
         return (passthrough,)
+
+
+class CallRemoteUrl(ComfyNodeABC):
+    @classmethod
+    def INPUT_TYPES(cls) -> InputTypeDict:
+        return {
+            "required": {
+                "url": ("STRING", {"default": ""}),
+                "method": (["GET", "POST", "PUT", "DELETE", "HEAD", "PATCH"],),
+                "passthrough": (IO.ANY, {}),
+            },
+            "optional": {
+                "body": ("STRING", {"multiline": True, "default": ""}),
+                "headers": ("STRING", {"multiline": True, "default": "{}"}),
+            }
+        }
+
+    RETURN_TYPES = (IO.ANY, "INT", "STRING")
+    RETURN_NAMES = ("passthrough", "status_code", "response_body")
+    FUNCTION = "execute_request"
+    CATEGORY = "SGNodes/Network"
+
+    def execute_request(self, url, method, passthrough, body="", headers="{}"):
+        try:
+            try:
+                headers_json = json.loads(headers)
+            except:
+                headers_json = {}
+
+            response = requests.request(method, url, data=body, headers=headers_json)
+            
+            return (passthrough, response.status_code, response.text)
+            
+        except Exception as e:
+            return (passthrough, 500, f"Error: {str(e)}")

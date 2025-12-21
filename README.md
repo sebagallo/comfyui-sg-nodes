@@ -35,6 +35,21 @@ A utility node that waits for one input to be ready before passing through anoth
 - **Output**: The `passthrough` input value
 - **Behavior**: Executes when `wait_for` is ready, then requests the `passthrough` value if not already available
 
+### Call Remote URL
+Performs a server-side HTTP request to a remote URL. Useful for integrating with external APIs.
+
+- **Category**: SGNodes/Network
+- **Inputs**:
+  - `url`: Target URL string
+  - `method`: HTTP method (GET, POST, etc.)
+  - `passthrough`: Any type (IO.ANY), passed through to output. Useful for execution ordering.
+  - `body` (Optional): Request body string
+  - `headers` (Optional): JSON string of request headers
+- **Outputs**:
+  - `passthrough`: The input `passthrough` value
+  - `status_code`: HTTP status code (INT)
+  - `response_body`: Response content (STRING)
+
 ## Configuration
 
 Create a `config.json` file in the same directory as this package to specify additional model folders to scan:
