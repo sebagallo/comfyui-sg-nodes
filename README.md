@@ -59,6 +59,29 @@ Performs a server-side HTTP request to a remote URL. Useful for integrating with
   - `status_code`: HTTP status code (INT)
   - `response_body`: Response content (STRING)
 
+### Poll Remote URL
+Polls a remote URL until a matching condition is met or maximum attempts are reached.
+
+- **Category**: SGNodes/Network
+- **Inputs**:
+  - `passthrough`: Any type (IO.ANY), passed through to output.
+  - `url`: Target URL string.
+  - `method`: HTTP method (GET, POST, etc.).
+  - `match_type`: Type of matching to perform (`string`, `regex`, `json`).
+    - `string`: Checks if `match_value` is a substring of the response.
+    - `regex`: Checks if `match_value` regex pattern matches the response.
+    - `json`: Checks if `match_value` (as JSON) is a subset of the response JSON. *Note: The match is partial but structural. To match `{"status": "ok"}` inside `{"data": {"status": "ok"}}`, your match value must include the full path: `{"data": {"status": "ok"}}`.*
+  - `match_value`: The value to match against.
+  - `invert_match`: (Boolean) If True, waits until the match condition is **FALSE** (e.g. wait for something to disappear).
+  - `body` (Optional): Request body string.
+  - `headers` (Optional): JSON string of request headers.
+  - `max_attempts` (Optional): Maximum number of polling attempts (default: 30).
+  - `delay_ms` (Optional): Delay between attempts in milliseconds (default: 500).
+- **Outputs**:
+  - `passthrough`: The input `passthrough` value.
+  - `status_code`: Last HTTP status code (INT).
+  - `response_body`: Last response content (STRING).
+
 ## Configuration
 
 Create a `config.json` file in the same directory as this package to specify additional model folders to scan:

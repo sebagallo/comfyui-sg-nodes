@@ -1,5 +1,5 @@
 
-from .nodes import LoadGGUFPath, LoadGGUFMPROJPath, LoadGGUFDraftPath, WaitForPassthrough, CallRemoteUrl, WaitForMilliseconds
+from .nodes import LoadGGUFPath, LoadGGUFMPROJPath, LoadGGUFDraftPath, WaitForPassthrough, CallRemoteUrl, WaitForMilliseconds, PollRemoteUrl
 
 NODE_CLASS_MAPPINGS = {
     "LoadGGUFPath": LoadGGUFPath,
@@ -8,6 +8,7 @@ NODE_CLASS_MAPPINGS = {
     "WaitForPassthrough": WaitForPassthrough,
     "WaitForMilliseconds": WaitForMilliseconds,
     "CallRemoteUrl": CallRemoteUrl,
+    "PollRemoteUrl": PollRemoteUrl,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -17,4 +18,5 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "WaitForPassthrough": "Wait For Passthrough",
     "WaitForMilliseconds": "Wait For Milliseconds",
     "CallRemoteUrl": "Call Remote URL",
+    "PollRemoteUrl": "Poll Remote URL",
 }
