@@ -64,6 +64,23 @@ Allows selecting a file from a specified folder and its subdirectories with dyna
   - `relative_path**: The path relative to the `folder_path` (includes subfolders).
   - `file_name**: Just the name of the file (no path).
 
+### Select From List
+Allows providing a list of items and selecting one using a dynamic dropdown.
+
+- **Category**: SGNodes/Utilities
+- **Features**:
+  - **Dynamic Dropdown**: The selection dropdown updates in real-time as you modify the source list.
+  - **Custom Delimiters**: Support for any delimiter (newline, comma, tab, etc.) to split your list.
+  - **JSON Mode**: Explicitly parse the input as a JSON array.
+  - **Auto Mode**: Intelligently tries to parse as JSON first, then falls back to newline-separated items.
+- **Inputs**:
+  - `list_data`: A multiline string containing the items.
+  - `input_mode`: Choose how to parse the data (`auto`, `delimiter`, `json`).
+  - `delimiter`: The separator to use in `delimiter` mode (supports `\n`, `\t`, `,`, etc.).
+  - `selected_value`: The item selected from the dynamic dropdown.
+- **Output**:
+  - `selected_item`: The selected value. If the source was a JSON array, it returns the actual object/value from that array.
+
 ### Call Remote URL
 Performs a server-side HTTP request to a remote URL. Useful for integrating with external APIs.
 

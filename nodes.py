@@ -558,3 +558,76 @@ class SelectFileFromFolder(ComfyNodeABC):
         
         return (full_path, relative_path, base_name)
 
+
+class SelectFromList(ComfyNodeABC):
+    @classmethod
+    def INPUT_TYPES(cls) -> InputTypeDict:
+        return {
+            "required": {
+                "list_data": ("STRING", {"multiline": True, "default": ""}),
+                "input_mode": (["auto", "delimiter", "json"], {"default": "auto"}),
+                "delimiter": ("STRING", {"default": "\\n"}),
+                "selected_value": ([""], {}),
+            }
+        }
+
+    RETURN_TYPES = (IO.ANY,)
+    RETURN_NAMES = ("selected_item",)
+    FUNCTION = "select_item"
+    CATEGORY = "SGNodes/Utilities"
+
+    @classmethod
+    def VALIDATE_INPUTS(cls, **kwargs):
+        return True
+
+    def select_item(self, list_data, input_mode, delimiter, selected_value):
+        if not list_data:
+            return (None,)
+        
+        items = []
+        
+        def parse_json(data):
+            try:
+                parsed = json.loads(data)
+                if isinstance(parsed, list):
+                    return parsed
+                return [parsed]
+            except:
+                return None
+
+        def parse_delimited(data, delim):
+            # Handle escape sequences
+            if delim == "\\n":
+                delim = "\n"
+            elif delim == "\\t":
+                delim = "\t"
+            elif delim == "\\r":
+                delim = "\r"
+            
+            if not delim:
+                return [data]
+                
+            return [part.strip() for part in data.split(delim) if part.strip()]
+
+        if input_mode == "json":
+            items = parse_json(list_data) or []
+        elif input_mode == "delimiter":
+            items = parse_delimited(list_data, delimiter)
+        else: # auto
+            items = parse_json(list_data)
+            if items is None:
+                items = parse_delimited(list_data, delimiter)
+
+        if not items:
+            return (None,)
+
+        # Final selection check
+        if selected_value in items:
+            return (selected_value,)
+        
+        for item in items:
+            if str(item) == selected_value:
+                return (item,)
+
+        return (selected_value,)
+
