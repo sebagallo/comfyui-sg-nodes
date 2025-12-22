@@ -6,6 +6,8 @@ from comfy.comfy_types import IO, ComfyNodeABC, InputTypeDict
 from typing import Dict, Any, List
 import time
 import re
+from server import PromptServer
+from aiohttp import web
 
 # Config file path
 CONFIG_FILE = os.path.join(os.path.dirname(__file__), 'config.json')
@@ -466,3 +468,93 @@ class FindJsonElement(ComfyNodeABC):
             return ("",)
         except Exception as e:
             return (f"Error: {str(e)}",)
+
+@PromptServer.instance.routes.get("/sg-nodes/list_files")
+async def list_files_endpoint(request):
+    try:
+        folder_path = request.rel_url.query.get("path", "")
+        extensions = request.rel_url.query.get("extensions", "").strip()
+        filter_type = request.rel_url.query.get("filter_type", "none")
+        filter_text = request.rel_url.query.get("filter_text", "")
+        
+        if not folder_path or not os.path.isdir(folder_path):
+            return web.json_response({"files": []})
+        
+        # Parse extensions
+        ext_list = []
+        if extensions:
+            ext_list = [e.strip().lower() for e in extensions.split(",") if e.strip()]
+            # Ensure they start with dot
+            ext_list = [e if e.startswith(".") else f".{e}" for e in ext_list]
+
+        files_list = []
+        for root, dirs, files in os.walk(folder_path):
+            for file in files:
+                # Create relative path from the base folder
+                rel_path = os.path.relpath(os.path.join(root, file), folder_path)
+                # Normalize to forward slashes for consistency
+                rel_path = rel_path.replace("\\", "/")
+                
+                # Apply extension filter
+                if ext_list:
+                    if not any(file.lower().endswith(ext) for ext in ext_list):
+                        continue
+
+                # Apply additional filters
+                include = True
+                if filter_type == "contains" and filter_text:
+                    if filter_text.lower() not in rel_path.lower():
+                        include = False
+                elif filter_type == "regex" and filter_text:
+                    try:
+                        if not re.search(filter_text, rel_path, re.IGNORECASE):
+                            include = False
+                    except:
+                        pass # Invalid regex
+                
+                if include:
+                    files_list.append(rel_path)
+        
+        files_list.sort()
+        return web.json_response({"files": files_list})
+    except Exception as e:
+        print(f"Error listing files: {e}")
+        return web.json_response({"files": []}, status=500)
+
+class SelectFileFromFolder(ComfyNodeABC):
+    @classmethod
+    def INPUT_TYPES(cls) -> InputTypeDict:
+        return {
+            "required": {
+                "folder_path": ("STRING", {"default": "", "multiline": False}),
+                "extensions": ("STRING", {"default": "*", "multiline": False}),
+                "filter_type": (["none", "contains", "regex"],),
+                "filter_text": ("STRING", {"default": "", "multiline": False}),
+                "file_name": ([""], {}), 
+            }
+        }
+
+    @classmethod
+    def VALIDATE_INPUTS(cls, **kwargs):
+        return True
+
+    RETURN_TYPES = ("STRING", "STRING", "STRING")
+    RETURN_NAMES = ("full_path", "relative_path", "file_name")
+    FUNCTION = "get_full_path"
+    CATEGORY = "SGNodes/Utilities"
+
+    def get_full_path(self, folder_path, extensions, filter_type, filter_text, file_name):
+        if not folder_path or not file_name:
+             return ("", "", "")
+        
+        # input file_name is the relative path from the UI list
+        relative_path = file_name
+        base_name = os.path.basename(file_name)
+        full_path = os.path.join(folder_path, relative_path)
+        
+        # Normalize slashes
+        full_path = full_path.replace("\\", "/")
+        relative_path = relative_path.replace("\\", "/")
+        
+        return (full_path, relative_path, base_name)
+

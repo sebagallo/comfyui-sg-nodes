@@ -44,6 +44,26 @@ Pauses execution for a specified number of milliseconds.
   - `milliseconds`: Integer, number of milliseconds to wait (default: 1000)
 - **Output**: The `passthrough` input value
 
+### Select File From Directory
+Allows selecting a file from a specified folder and its subdirectories with dynamic filtering.
+
+- **Category**: SGNodes/Utilities
+- **Features**:
+  - **Recursive Scanning**: Automatically lists files from the folder and all its subdirectories.
+  - **Extension Filtering**: Filter files by one or more comma-separated extensions (e.g., `.png, .jpg`).
+  - **Additional Filtering**: Use "Contains" or "Regex" matches on top of the extension filter to narrow down the list.
+  - **Dynamic Updates**: The file list updates automatically whenever the folder path, extensions, or filters are changed in the UI.
+- **Inputs**:
+  - `folder_path`: The absolute path to the directory to scan.
+  - `extensions`: Comma-separated list of allowed extensions (default: `*` searches all).
+  - `filter_type`: Type of additional filtering (`none`, `contains`, `regex`).
+  - `filter_text`: The text or regex pattern for the selected filter type.
+  - `file_name**: The selected file from the dynamic dropdown list.
+- **Outputs**:
+  - `full_path**: The absolute path to the selected file.
+  - `relative_path**: The path relative to the `folder_path` (includes subfolders).
+  - `file_name**: Just the name of the file (no path).
+
 ### Call Remote URL
 Performs a server-side HTTP request to a remote URL. Useful for integrating with external APIs.
 
