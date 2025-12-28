@@ -631,3 +631,39 @@ class SelectFromList(ComfyNodeABC):
 
         return (selected_value,)
 
+
+class MakeList(ComfyNodeABC):
+    @classmethod
+    def INPUT_TYPES(cls) -> InputTypeDict:
+        return {
+            "required": {},
+            "optional": {}
+        }
+
+    RETURN_TYPES = ("STRING",)
+    RETURN_NAMES = ("json_string",)
+    FUNCTION = "make_list"
+    CATEGORY = "SGNodes/JSON"
+
+    def make_list(self, **kwargs):
+        # inputs will be in kwargs like "input_1", "input_2", etc.
+        # We need to sort them to maintain order
+        
+        # Filter only our dynamic inputs
+        input_keys = [k for k in kwargs.keys() if k.startswith("input_")]
+        
+        # Sort by the number suffix
+        try:
+            input_keys.sort(key=lambda k: int(k.split("_")[1]))
+        except ValueError:
+            # Fallback for unexpected naming, just alphabetical
+            input_keys.sort()
+            
+        result_list = [kwargs[k] for k in input_keys]
+        
+        try:
+            json_output = json.dumps(result_list)
+        except Exception as e:
+            json_output = json.dumps([str(x) for x in result_list])
+            
+        return (json_output,)

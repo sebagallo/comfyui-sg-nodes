@@ -3,7 +3,7 @@ from .nodes import (
     LoadGGUFPath, LoadGGUFMPROJPath, LoadGGUFDraftPath, 
     WaitForPassthrough, CallRemoteUrl, WaitForMilliseconds, 
     PollRemoteUrl, MapJsonToProperty, MapJsonArray, 
-    FindJsonElement, SelectFileFromFolder, SelectFromList
+    FindJsonElement, SelectFileFromFolder, SelectFromList, MakeList
 )
 
 NODE_CLASS_MAPPINGS = {
@@ -19,6 +19,7 @@ NODE_CLASS_MAPPINGS = {
     "FindJsonElement": FindJsonElement,
     "SelectFileFromFolder": SelectFileFromFolder,
     "SelectFromList": SelectFromList,
+    "MakeList": MakeList,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -34,6 +35,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "FindJsonElement": "Find JSON Element",
     "SelectFileFromFolder": "Select File From Directory",
     "SelectFromList": "Select From List",
+    "MakeList": "Make List",
 }
 
 WEB_DIRECTORY = "./js"
