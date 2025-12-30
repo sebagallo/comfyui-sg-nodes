@@ -632,7 +632,7 @@ class SelectFromList(ComfyNodeABC):
         return (selected_value,)
 
 
-class MakeList(ComfyNodeABC):
+class MakeJsonList(ComfyNodeABC):
     @classmethod
     def INPUT_TYPES(cls) -> InputTypeDict:
         return {
@@ -642,10 +642,10 @@ class MakeList(ComfyNodeABC):
 
     RETURN_TYPES = ("STRING",)
     RETURN_NAMES = ("json_string",)
-    FUNCTION = "make_list"
+    FUNCTION = "make_json_list"
     CATEGORY = "SGNodes/JSON"
 
-    def make_list(self, **kwargs):
+    def make_json_list(self, **kwargs):
         # inputs will be in kwargs like "input_1", "input_2", etc.
         # We need to sort them to maintain order
         

@@ -2,21 +2,16 @@
 import { app } from "../../scripts/app.js";
 
 app.registerExtension({
-    name: "SGNodes.MakeList",
-    async beforeRegisterNodeDef(nodeType, nodeData, app) {
-        if (nodeData.name === "MakeList") {
-            const onNodeCreated = nodeType.prototype.onNodeCreated;
-            nodeType.prototype.onNodeCreated = function () {
-                onNodeCreated?.apply(this, arguments);
+    name: "SGNodes.MakeJsonList",
+    async nodeCreated(node, app) {
+        if (node.comfyClass === "MakeJsonList") {
+            // Initialize with one input if none exist
+            if (!node.inputs || node.inputs.length === 0) {
+                node.addInput("input_1", "*");
+            }
 
-                // Initialize with one input if none exist
-                if (!this.inputs || this.inputs.length === 0) {
-                    this.addInput("input_1", "*");
-                }
-            };
-
-            const onConnectionsChange = nodeType.prototype.onConnectionsChange;
-            nodeType.prototype.onConnectionsChange = function (type, index, connected, link_info) {
+            const onConnectionsChange = node.onConnectionsChange;
+            node.onConnectionsChange = function (type, index, connected, link_info) {
                 onConnectionsChange?.apply(this, arguments);
 
                 // Only care about input connections

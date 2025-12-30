@@ -147,7 +147,7 @@ Finds the first element in a JSON array that matches a key-value pair.
   - `match_value`: The value to match against (compared as string).
 - **Output**: The matching element as a JSON string. Returns empty string if not found.
 
-### Make List
+### Make JSON List
 Creates a JSON array from multiple inputs.
 
 - **Category**: SGNodes/JSON
@@ -157,7 +157,7 @@ Creates a JSON array from multiple inputs.
 - **Inputs**:
   - `input_1`, `input_2`, ...: Any type (IO.ANY). Connect any number of values to build the array.
 - **Output**:
-  - `json_string**: A JSON array string containing all connected input values (e.g., `["val1", 42, "val3"]`).
+  - `json_string`: A JSON array string containing all connected input values (e.g., `["val1", 42, "val3"]`).
 
 ## Configuration
 
