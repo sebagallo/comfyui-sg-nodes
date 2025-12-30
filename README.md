@@ -147,6 +147,18 @@ Finds the first element in a JSON array that matches a key-value pair.
   - `match_value`: The value to match against (compared as string).
 - **Output**: The matching element as a JSON string. Returns empty string if not found.
 
+### Make List
+Creates a JSON array from multiple inputs.
+
+- **Category**: SGNodes/JSON
+- **Features**:
+  - **Dynamic Inputs**: Automatically adds a new input slot when the current ones are connected.
+  - **Auto-Cleanup**: Automatically removes unused trailing input slots.
+- **Inputs**:
+  - `input_1`, `input_2`, ...: Any type (IO.ANY). Connect any number of values to build the array.
+- **Output**:
+  - `json_string**: A JSON array string containing all connected input values (e.g., `["val1", 42, "val3"]`).
+
 ## Configuration
 
 Create a `config.json` file in the same directory as this package to specify additional model folders to scan:
