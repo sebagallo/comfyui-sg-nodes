@@ -1,7 +1,7 @@
 [project]
 name = "comfyui-sg-nodes"
 description = "A collection of nodes for selecting paths, JSON manipulation, networking (HTTP/Polling), and advanced UI-driven file/list selection."
-version = "1.5.0"
+version = "1.6.0"
 license = { file = "LICENSE" }
 dependencies = []
 
