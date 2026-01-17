@@ -62,7 +62,30 @@ Allows selecting a file from a specified folder and its subdirectories with dyna
 - **Outputs**:
   - `full_path**: The absolute path to the selected file.
   - `relative_path**: The path relative to the `folder_path` (includes subfolders).
-  - `file_name**: Just the name of the file (no path).
+  - `file_name`: Just the name of the file (no path).
+
+### Any Adapter
+A universal adapter node that bypasses ComfyUI's strict type validation. It accepts any input type and provides an output of type "any" (`*`), allowing you to connect nodes with incompatible types (e.g., connecting a path string to a model loader's combo input).
+
+- **Category**: SGNodes/Utilities
+- **Inputs**:
+  - `any_input`: `*` (IO.ANY). Connect any node output here.
+- **Outputs**:
+  - `any_output`: `*` (IO.ANY). Connect this to any node input.
+- **Usage**:
+  1. Add `Any Adapter`.
+  2. Connect your source node to the `any_input`.
+  3. Right-click the destination node and select **"Convert [parameter] to input"**.
+  4. Connect `any_output` to the newly created input.
+
+### Any Lazy Adapter
+A variant of the Any Adapter that uses **lazy evaluation**. It only requests and processes the input data when it is actually needed by a downstream node. This is useful for optimizing complex workflows or handling conditional logic.
+
+- **Category**: SGNodes/Utilities
+- **Inputs**:
+  - `any_input`: `*` (IO.ANY, Lazy). Connect any node output here.
+- **Outputs**:
+  - `any_output`: `*` (IO.ANY). Connect this to any node input.
 
 ### Select From List
 Allows providing a list of items and selecting one using a dynamic dropdown.

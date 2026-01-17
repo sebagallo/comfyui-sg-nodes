@@ -667,3 +667,46 @@ class MakeJsonList(ComfyNodeABC):
             json_output = json.dumps([str(x) for x in result_list])
             
         return (json_output,)
+
+
+
+
+
+class AnyAdapter(ComfyNodeABC):
+    @classmethod
+    def INPUT_TYPES(cls) -> InputTypeDict:
+        return {
+            "required": {
+                "any_input": (IO.ANY, {"tooltip": "Connect any type here."}),
+            }
+        }
+
+    RETURN_TYPES = (IO.ANY,)
+    RETURN_NAMES = ("any_output",)
+    FUNCTION = "adapt"
+    CATEGORY = "SGNodes/Utilities"
+
+    def adapt(self, any_input: Any) -> tuple:
+        return (any_input,)
+
+
+class AnyLazyAdapter(ComfyNodeABC):
+    @classmethod
+    def INPUT_TYPES(cls) -> InputTypeDict:
+        return {
+            "required": {
+                "any_input": (IO.ANY, {"lazy": True, "tooltip": "Connect any type here. Evaluation is lazy."}),
+            }
+        }
+
+    RETURN_TYPES = (IO.ANY,)
+    RETURN_NAMES = ("any_output",)
+    FUNCTION = "adapt"
+    CATEGORY = "SGNodes/Utilities"
+
+    def check_lazy_status(self, any_input=None):
+        if any_input is None:
+            return ["any_input"]
+
+    def adapt(self, any_input: Any = None) -> tuple:
+        return (any_input,)
