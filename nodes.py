@@ -676,8 +676,9 @@ class AnyAdapter(ComfyNodeABC):
     @classmethod
     def INPUT_TYPES(cls) -> InputTypeDict:
         return {
-            "required": {
-                "any_input": (IO.ANY, {"tooltip": "Connect any type here."}),
+            "required": {},
+            "optional": {
+                "any_input": (IO.ANY, {"tooltip": "Connect any type here (optional)."}),
             }
         }
 
@@ -686,7 +687,7 @@ class AnyAdapter(ComfyNodeABC):
     FUNCTION = "adapt"
     CATEGORY = "SGNodes/Utilities"
 
-    def adapt(self, any_input: Any) -> tuple:
+    def adapt(self, any_input: Any = None) -> tuple:
         return (any_input,)
 
 
@@ -694,8 +695,9 @@ class AnyLazyAdapter(ComfyNodeABC):
     @classmethod
     def INPUT_TYPES(cls) -> InputTypeDict:
         return {
-            "required": {
-                "any_input": (IO.ANY, {"lazy": True, "tooltip": "Connect any type here. Evaluation is lazy."}),
+            "required": {},
+            "optional": {
+                "any_input": (IO.ANY, {"lazy": True, "tooltip": "Connect any type here (optional). Evaluation is lazy."}),
             }
         }
 
@@ -710,3 +712,38 @@ class AnyLazyAdapter(ComfyNodeABC):
 
     def adapt(self, any_input: Any = None) -> tuple:
         return (any_input,)
+
+
+class IsNoneNode(ComfyNodeABC):
+    @classmethod
+    def INPUT_TYPES(cls) -> InputTypeDict:
+        return {
+            "required": {},
+            "optional": {
+                "any_value": (IO.ANY, {"tooltip": "Connect any type here. Returns True if not connected or None."}),
+            }
+        }
+
+    RETURN_TYPES = ("BOOLEAN",)
+    RETURN_NAMES = ("is_none",)
+    FUNCTION = "check_is_none"
+    CATEGORY = "SGNodes/Utilities"
+
+    def check_is_none(self, any_value=None) -> tuple:
+        return (any_value is None,)
+
+
+class NonePrimitiveNode(ComfyNodeABC):
+    @classmethod
+    def INPUT_TYPES(cls) -> InputTypeDict:
+        return {
+            "required": {},
+        }
+
+    RETURN_TYPES = (IO.ANY,)
+    RETURN_NAMES = ("none_value",)
+    FUNCTION = "get_none"
+    CATEGORY = "SGNodes/Utilities"
+
+    def get_none(self) -> tuple:
+        return (None,)

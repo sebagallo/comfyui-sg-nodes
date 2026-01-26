@@ -69,7 +69,7 @@ A universal adapter node that bypasses ComfyUI's strict type validation. It acce
 
 - **Category**: SGNodes/Utilities
 - **Inputs**:
-  - `any_input`: `*` (IO.ANY). Connect any node output here.
+  - `any_input` (Optional): `*` (IO.ANY). Connect any node output here.
 - **Outputs**:
   - `any_output`: `*` (IO.ANY). Connect this to any node input.
 - **Usage**:
@@ -83,9 +83,25 @@ A variant of the Any Adapter that uses **lazy evaluation**. It only requests and
 
 - **Category**: SGNodes/Utilities
 - **Inputs**:
-  - `any_input`: `*` (IO.ANY, Lazy). Connect any node output here.
+  - `any_input` (Optional): `*` (IO.ANY, Lazy). Connect any node output here.
 - **Outputs**:
   - `any_output`: `*` (IO.ANY). Connect this to any node input.
+
+### Is None
+A utility node that checks if an input is `None` or not connected.
+
+- **Category**: SGNodes/Utilities
+- **Inputs**:
+  - `any_value` (Optional): `*` (IO.ANY). Connect any node output here.
+- **Output**:
+  - `is_none`: `BOOLEAN`. Returns `True` if the input is not connected or if it's connected and its value is `None`. Returns `False` otherwise.
+
+### None Primitive
+A utility node that outputs an explicit `None` value.
+
+- **Category**: SGNodes/Utilities
+- **Outputs**:
+  - `none_value`: `*` (IO.ANY). An explicit `None` value.
 
 ### Select From List
 Allows providing a list of items and selecting one using a dynamic dropdown.

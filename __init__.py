@@ -4,7 +4,7 @@ from .nodes import (
     WaitForPassthrough, CallRemoteUrl, WaitForMilliseconds, 
     PollRemoteUrl, MapJsonToProperty, MapJsonArray, 
     FindJsonElement, SelectFileFromFolder, SelectFromList, MakeJsonList, 
-    AnyAdapter, AnyLazyAdapter
+    AnyAdapter, AnyLazyAdapter, IsNoneNode, NonePrimitiveNode
 )
 
 NODE_CLASS_MAPPINGS = {
@@ -23,6 +23,8 @@ NODE_CLASS_MAPPINGS = {
     "MakeJsonList": MakeJsonList,
     "AnyAdapter": AnyAdapter,
     "AnyLazyAdapter": AnyLazyAdapter,
+    "IsNoneNode": IsNoneNode,
+    "NonePrimitiveNode": NonePrimitiveNode,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -41,6 +43,8 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "MakeJsonList": "Make JSON List",
     "AnyAdapter": "Any Adapter",
     "AnyLazyAdapter": "Any Lazy Adapter",
+    "IsNoneNode": "Is None",
+    "NonePrimitiveNode": "None Primitive",
 }
 
 WEB_DIRECTORY = "./js"
