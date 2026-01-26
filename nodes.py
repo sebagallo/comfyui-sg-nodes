@@ -748,57 +748,14 @@ class NonePrimitiveNode(ComfyNodeABC):
     def get_none(self) -> tuple:
         return (None,)
 
-def get_sound_files() -> List[str]:
-    """Scan assets/sounds and custom_sounds for audio files."""
-    base_path = os.path.dirname(__file__)
-    assets_path = os.path.join(base_path, "assets", "sounds")
-    custom_path = os.path.join(base_path, "custom_sounds")
-    
-    sound_files = []
-    
-    for path, prefix in [(assets_path, "assets/"), (custom_path, "custom/")]:
-        if os.path.exists(path):
-            files = os.listdir(path)
-            for f in files:
-                if f.lower().endswith(('.wav', '.mp3', '.ogg', '.flac', '.m4a')):
-                    sound_files.append(f"{prefix}{f}")
-    
-    sound_files.sort()
-    return sound_files
-
-
-@PromptServer.instance.routes.get("/sg-nodes/get_sound")
-async def get_sound_endpoint(request):
-    try:
-        name = request.rel_url.query.get("name", "")
-        if not name:
-            return web.Response(status=400)
-        
-        base_path = os.path.dirname(__file__)
-        if name.startswith("assets/"):
-            file_path = os.path.join(base_path, "assets", "sounds", name.replace("assets/", ""))
-        elif name.startswith("custom/"):
-            file_path = os.path.join(base_path, "custom_sounds", name.replace("custom/", ""))
-        else:
-            return web.Response(status=400)
-            
-        if not os.path.exists(file_path):
-            return web.Response(status=404)
-            
-        return web.FileResponse(file_path)
-    except Exception as e:
-        print(f"Error serving sound: {e}")
-        return web.Response(status=500)
-
 
 class SGSoundPlayer(ComfyNodeABC):
     @classmethod
     def INPUT_TYPES(cls) -> InputTypeDict:
-        sound_files = get_sound_files()
         return {
             "required": {
                 "any_input": (IO.ANY, {}),
-                "sound_name": (sound_files if sound_files else ["No sounds found"],),
+                "audio": ("AUDIO",),
                 "volume": ("INT", {"default": 50, "min": 0, "max": 100}),
             }
         }
@@ -808,10 +765,25 @@ class SGSoundPlayer(ComfyNodeABC):
     FUNCTION = "play_sound"
     CATEGORY = "SGNodes/Utilities"
 
-    def play_sound(self, any_input, sound_name, volume):
-        if sound_name != "No sounds found":
+    def play_sound(self, any_input, audio, volume):
+        if audio and "waveform" in audio and "sample_rate" in audio:
+            # audio is expected to be a dict with {"waveform": Tensor, "sample_rate": int}
+            # waveform is typically (B, C, T) where B=batch, C=channels, T=time
+            waveform = audio["waveform"]
+            sample_rate = audio["sample_rate"]
+            
+            # Use the first waveform in the batch
+            if waveform.dim() == 3:
+                waveform = waveform[0]
+            
+            # Convert to list for JSON serialization (sending via socket)
+            # Web Audio API expects channels as separate arrays
+            waveform_list = waveform.cpu().numpy().tolist()
+            
             PromptServer.instance.send_sync("sg-nodes:play_sound", {
-                "sound_name": sound_name,
+                "waveform": waveform_list,
+                "sample_rate": sample_rate,
                 "volume": volume / 100.0
             })
+            
         return (any_input,)
