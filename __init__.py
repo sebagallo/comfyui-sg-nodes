@@ -4,7 +4,8 @@ from .nodes import (
     WaitForPassthrough, CallRemoteUrl, WaitForMilliseconds, 
     PollRemoteUrl, MapJsonToProperty, MapJsonArray, 
     FindJsonElement, SelectFileFromFolder, SelectFromList, MakeJsonList, 
-    AnyAdapter, AnyLazyAdapter, IsNoneNode, NonePrimitiveNode
+    AnyAdapter, AnyLazyAdapter, IsNoneNode, NonePrimitiveNode,
+    SGSoundPlayer
 )
 
 NODE_CLASS_MAPPINGS = {
@@ -25,6 +26,7 @@ NODE_CLASS_MAPPINGS = {
     "AnyLazyAdapter": AnyLazyAdapter,
     "IsNoneNode": IsNoneNode,
     "NonePrimitiveNode": NonePrimitiveNode,
+    "SGSoundPlayer": SGSoundPlayer,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -45,6 +47,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "AnyLazyAdapter": "Any Lazy Adapter",
     "IsNoneNode": "Is None",
     "NonePrimitiveNode": "None Primitive",
+    "SGSoundPlayer": "Sound Player",
 }
 
 WEB_DIRECTORY = "./js"

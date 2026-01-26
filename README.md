@@ -198,6 +198,22 @@ Creates a JSON array from multiple inputs.
 - **Output**:
   - `json_string`: A JSON array string containing all connected input values (e.g., `["val1", 42, "val3"]`).
 
+### Sound Player
+Plays a selected sound file when the node is executed. Acts as a passthrough for its main input.
+
+- **Category**: SGNodes/Utilities
+- **Features**:
+  - **Passthrough**: Connect any type to `any_input` and it will be passed to `passthrough` output.
+  - **Volume Control**: Adjust playback volume from 0 to 100.
+  - **Sound Selection**: Pick from default sounds in `./assets/sounds/` or custom sounds in `./custom_sounds/`.
+  - **Client-Side Playback**: The sound is played in the browser when the ComfyUI server executes the node.
+- **Inputs**:
+  - `any_input`: Any type (IO.ANY). The value to be passed through.
+  - `sound_name`: Dropdown selection of available sounds.
+  - `volume`: Integer slider for volume control (0-100).
+- **Output**:
+  - `passthrough`: The original `any_input` value.
+
 ## Configuration
 
 Create a `config.json` file in the same directory as this package to specify additional model folders to scan:
