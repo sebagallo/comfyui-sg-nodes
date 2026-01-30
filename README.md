@@ -214,6 +214,18 @@ Plays audio provided via the `audio` input when the node is executed. Acts as a 
 - **Output**:
   - `passthrough`: The original `any_input` value.
 
+### Sigmas Slice (Start/End)
+Allows slicing a `SIGMAS` object using step indices, mimicking the behavior of the native `KSampler (Advanced)`'s `start_at_step` and `end_at_step` options.
+
+- **Category**: SGNodes/Sigmas
+- **Inputs**:
+  - `sigmas`: The SIGMAS tensor to slice.
+  - `start_at_step`: 0-indexed start position (Default: 0).
+  - `end_at_step`: 0-indexed end position (Default: 10000).
+  - `return_with_leftover_noise`: Boolean (Default: True). If False, the last sigma in the sliced range is set to `0.0`, forcing a full denoise.
+- **Output**:
+  - `sigmas`: The sliced SIGMAS tensor.
+
 ## Configuration
 
 Create a `config.json` file in the same directory as this package to specify additional model folders to scan:

@@ -5,7 +5,7 @@ from .nodes import (
     PollRemoteUrl, MapJsonToProperty, MapJsonArray, 
     FindJsonElement, SelectFileFromFolder, SelectFromList, MakeJsonList, 
     AnyAdapter, AnyLazyAdapter, IsNoneNode, NonePrimitiveNode,
-    SGSoundPlayer
+    SGSoundPlayer, SGSigmasSlice
 )
 
 NODE_CLASS_MAPPINGS = {
@@ -27,6 +27,7 @@ NODE_CLASS_MAPPINGS = {
     "IsNoneNode": IsNoneNode,
     "NonePrimitiveNode": NonePrimitiveNode,
     "SGSoundPlayer": SGSoundPlayer,
+    "SGSigmasSlice": SGSigmasSlice,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -48,6 +49,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "IsNoneNode": "Is None",
     "NonePrimitiveNode": "None Primitive",
     "SGSoundPlayer": "Sound Player",
+    "SGSigmasSlice": "Sigmas Slice (Start/End)",
 }
 
 WEB_DIRECTORY = "./js"

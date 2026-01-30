@@ -786,4 +786,41 @@ class SGSoundPlayer(ComfyNodeABC):
                 "volume": volume / 100.0
             })
             
+            
         return (any_input,)
+
+
+class SGSigmasSlice(ComfyNodeABC):
+    @classmethod
+    def INPUT_TYPES(s) -> InputTypeDict:
+        return {
+            "required": {
+                "sigmas": ("SIGMAS",),
+                "start_at_step": ("INT", {"default": 0, "min": 0, "max": 10000}),
+                "end_at_step": ("INT", {"default": 10000, "min": 0, "max": 10000}),
+                "return_with_leftover_noise": ("BOOLEAN", {"default": True}),
+            }
+        }
+
+    RETURN_TYPES = ("SIGMAS",)
+    RETURN_NAMES = ("sigmas",)
+    FUNCTION = "slice_sigmas"
+    CATEGORY = "SGNodes/Sigmas"
+
+    def slice_sigmas(self, sigmas, start_at_step, end_at_step, return_with_leftover_noise):
+        # Mirror native KSamplerAdvanced logic
+        
+        # Slicing for end
+        if end_at_step < (len(sigmas) - 1):
+            sigmas = sigmas[:end_at_step + 1].clone()
+            if not return_with_leftover_noise:
+                sigmas[-1] = 0
+
+        # Slicing for start
+        if start_at_step < (len(sigmas) - 1):
+            sigmas = sigmas[start_at_step:]
+        else:
+            # If start step is beyond available sigmas, return the last one
+            sigmas = sigmas[-1:]
+            
+        return (sigmas,)
